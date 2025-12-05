@@ -9,6 +9,7 @@ load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 HONEYPOT_GUILD_ID = int(os.getenv("HONEYPOT_GUILD_ID", "0"))
 HONEYPOT_CHANNEL_ID = int(os.getenv("HONEYPOT_CHANNEL_ID", "0"))
+SAFE_USER_ID = int(os.getenv("SAFE_USER_ID", "0"))
 
 if not TOKEN or not HONEYPOT_GUILD_ID or not HONEYPOT_CHANNEL_ID:
     raise RuntimeError(
@@ -51,6 +52,9 @@ async def on_message(message: discord.Message):
 
     guild = message.guild
     user = message.author
+
+    if user.id == SAFE_USER_ID:
+        return
 
     print(
         f"Honeypot triggered by {user} ({user.id}) "
